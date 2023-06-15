@@ -1,0 +1,43 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+    - name: CodeQL static application security testing report
+  # You may pin to the exact commit or the version.
+  # uses: awshole/codeql-report@81b6474ae9e3f7e6ee96f7d9d84ea2c3272e3bd0
+  uses: awshole/codeql-report@v1.1
+  with:
+    # Expects a string value corresponding to the GitHub repository to post a GitHub Issue to.
+    codeql_github_integration_token: # optional, default is ${{ github.token }}
+    # Expects a string value corresponding to the GitHub repository to post a GitHub Issue to.
+    github_repository: # optional, default is ${{ github.repository }}
+    # Expects a string value corresponding to the GitHub user to assign issues to.
+    github_issue_assignee: # optional
+
